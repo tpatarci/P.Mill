@@ -20,33 +20,33 @@
 
 **Goal**: Parse Python code into structured representations
 
-### Card 1.1: AST Parser
-- [ ] Implement Python AST parsing
-- [ ] Extract functions, classes, imports
-- [ ] Build unified ASTNode representation
-- [ ] Test with various Python constructs
-- [ ] Handle syntax errors gracefully
+### Card 1.1: AST Parser ✅ COMPLETE
+- [x] Implement Python AST parsing
+- [x] Extract functions, classes, imports
+- [x] Build unified ASTNode representation
+- [x] Test with various Python constructs
+- [x] Handle syntax errors gracefully
 
-### Card 1.2: Complexity Metrics
-- [ ] Integrate radon for cyclomatic complexity
-- [ ] Calculate cognitive complexity
-- [ ] Compute maintainability index
-- [ ] Lines of code metrics
-- [ ] Test on fixture code samples
+### Card 1.2: Complexity Metrics ✅ COMPLETE
+- [x] Integrate radon for cyclomatic complexity
+- [x] Calculate cognitive complexity
+- [x] Compute maintainability index
+- [x] Lines of code metrics
+- [x] Test on fixture code samples
 
-### Card 1.3: Control Flow Graph
-- [ ] Build CFG from AST
-- [ ] Identify entry/exit points
-- [ ] Handle branches and loops
-- [ ] Represent function calls
-- [ ] Visualize CFG (dot format)
+### Card 1.3: Control Flow Graph ✅ COMPLETE
+- [x] Build CFG from AST
+- [x] Identify entry/exit points
+- [x] Handle branches and loops
+- [x] Represent function calls
+- [x] Visualize CFG (dot format)
 
-### Card 1.4: Dependency Analysis
-- [ ] Extract import dependencies
-- [ ] Build module dependency graph
-- [ ] Identify circular dependencies
-- [ ] Detect unused imports
-- [ ] Test on real projects
+### Card 1.4: Dependency Analysis ✅ COMPLETE
+- [x] Extract import dependencies
+- [x] Build module dependency graph
+- [x] Identify circular dependencies
+- [x] Detect unused imports
+- [x] Test on real projects
 
 ### Card 1.5: Language Detection ✅ COMPLETE
 - [x] Integrate Pygments for language detection
