@@ -44,6 +44,7 @@ dependencies = [
     "astroid>=3.3.0",
     "radon>=6.0.0",
     "networkx>=3.4.0",
+    "pygments>=2.18.0",
     # Security scanning
     "bandit>=1.8.0",
     "safety>=3.3.0",

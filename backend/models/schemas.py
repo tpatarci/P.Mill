@@ -23,7 +23,14 @@ class AnalysisRequest(BaseModel):
     """Request to analyze code."""
 
     code: str = Field(..., description="Source code to analyze")
-    language: str = Field(default="python", description="Programming language")
+    language: Optional[str] = Field(
+        default=None,
+        description="Programming language (auto-detected if not provided)"
+    )
+    filename: Optional[str] = Field(
+        default=None,
+        description="Filename for extension-based language detection"
+    )
     entry_point: Optional[str] = Field(
         default=None, description="Function/class to focus on"
     )

@@ -111,6 +111,7 @@ python -m backend.cli analyze path/to/file.py
 - Core data models
 - Configuration system
 - Basic API and CLI scaffolds
+- Automatic language detection (Pygments)
 
 ### 🔨 Phase 1: Code Ingestion (NEXT)
 **Cards 1.1-1.4**: AST parsing, complexity metrics, CFG, dependency analysis

@@ -1,6 +1,6 @@
 # Program Mill — Implementation Roadmap
 
-## Phase 0: Foundation (CURRENT)
+## Phase 0: Foundation
 
 **Status**: ✅ Complete
 
@@ -12,6 +12,7 @@
 - [x] Configuration management
 - [x] Basic FastAPI app structure
 - [x] CLI scaffold
+- [x] Automatic language detection (Pygments)
 - [x] Git repository initialized
 - [x] MIT License
 
@@ -46,6 +47,13 @@
 - [ ] Identify circular dependencies
 - [ ] Detect unused imports
 - [ ] Test on real projects
+
+### Card 1.5: Language Detection ✅ COMPLETE
+- [x] Integrate Pygments for language detection
+- [x] Filename-based detection
+- [x] Content-based detection fallback
+- [x] Language normalization mapping
+- [x] Comprehensive test suite
 
 ## Phase 2: Structural Analysis
 
