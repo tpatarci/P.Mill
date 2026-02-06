@@ -146,16 +146,20 @@ class ClassInfo(BaseModel):
     name: str
     line_start: int
     line_end: int
-    methods: List[str]
+    methods: List[str] = Field(default_factory=list)
     bases: List[str] = Field(default_factory=list)
+    decorators: List[str] = Field(default_factory=list)
+    docstring: Optional[str] = None
 
 
 class ImportInfo(BaseModel):
     """Information about an import."""
 
     module: str
-    names: List[str]
-    line: int
+    names: List[str] = Field(default_factory=list)
+    alias: Optional[str] = None
+    line: int = 0
+    is_from: bool = False  # True for 'from X import Y', False for 'import X'
 
 
 class ComplexityMetrics(BaseModel):
