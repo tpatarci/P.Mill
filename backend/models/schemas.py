@@ -19,6 +19,79 @@ class AnalysisStatus(str, Enum):
     FAILED = "failed"
 
 
+class FindingTier(str, Enum):
+    """Tier of a verification finding."""
+
+    TIER1_DETERMINISTIC = "tier1_deterministic"
+    TIER2_HEURISTIC = "tier2_heuristic"
+    TIER3_SEMANTIC = "tier3_semantic"
+
+
+class FindingConfidence(str, Enum):
+    """Confidence level of a finding."""
+
+    HIGH = "high"
+    MEDIUM = "medium"
+    LOW = "low"
+    INCONCLUSIVE = "inconclusive"
+
+
+class ParameterInfo(BaseModel):
+    """Information about a function parameter."""
+
+    name: str
+    type_hint: Optional[str] = None
+    has_default: bool = False
+    default_is_mutable: bool = False
+
+
+class FunctionFacts(BaseModel):
+    """Deterministic facts extracted from AST for a single function."""
+
+    function_name: str
+    qualified_name: str = ""
+    line_start: int
+    line_end: int
+    is_method: bool = False
+    is_async: bool = False
+    class_name: Optional[str] = None
+    decorators: List[str] = Field(default_factory=list)
+    parameters: List[ParameterInfo] = Field(default_factory=list)
+    return_annotation: Optional[str] = None
+    has_docstring: bool = False
+    docstring: Optional[str] = None
+    cyclomatic_complexity: int = 1
+    loc: int = 0
+    source_code: str = ""
+    has_bare_except: bool = False
+    has_broad_except: bool = False
+    has_mutable_default_args: bool = False
+    uses_open_without_with: bool = False
+    has_none_checks: List[str] = Field(default_factory=list)
+    has_type_checks: List[str] = Field(default_factory=list)
+    raise_types: List[str] = Field(default_factory=list)
+    caught_types: List[str] = Field(default_factory=list)
+    calls: List[str] = Field(default_factory=list)
+    has_return_on_all_paths: bool = True
+    has_unreachable_code: bool = False
+    shadows_builtin: List[str] = Field(default_factory=list)
+    star_imports_used: bool = False
+    uses_command_execution: bool = False
+    command_execution_has_fstring: bool = False
+
+
+class LLMCheckMetadata(BaseModel):
+    """Metadata about an LLM-assisted check."""
+
+    prompt_template: str
+    model_id: str
+    attempts: int
+    first_response_parseable: bool
+    raw_response: str
+    parsed_answer: str
+    cross_validation_result: Literal["confirmed", "no_data", "contradicted"]
+
+
 class AnalysisRequest(BaseModel):
     """Request to analyze code."""
 
@@ -178,6 +251,8 @@ class VerificationIssue(BaseModel):
     title: str
     description: str
     location: str = Field(..., description="File:line or function name")
+    tier: FindingTier = FindingTier.TIER1_DETERMINISTIC
+    confidence: FindingConfidence = FindingConfidence.HIGH
     evidence: List[str] = Field(
         default_factory=list, description="Concrete evidence (AST facts, dataflow, etc.)"
     )
@@ -185,6 +260,9 @@ class VerificationIssue(BaseModel):
     suggested_fix: Optional[str] = None
     proof_of_fix: Optional[str] = Field(
         default=None, description="Why fix is correct"
+    )
+    llm_metadata: Optional[LLMCheckMetadata] = Field(
+        default=None, description="Metadata if LLM-assisted"
     )
 
 
@@ -194,6 +272,10 @@ class VerificationReport(BaseModel):
     analysis_id: str
     timestamp: datetime
     code_hash: str = Field(..., description="SHA256 of analyzed code")
+    file_path: str
+    language: str
+    function_count: int = 0
+    functions_analyzed: List[str] = Field(default_factory=list)
     issues: List[VerificationIssue] = Field(default_factory=list)
     proven_properties: List[str] = Field(
         default_factory=list, description="What was formally verified"
