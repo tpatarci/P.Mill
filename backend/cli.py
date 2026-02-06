@@ -1,9 +1,15 @@
 """Command-line interface for Program Mill."""
 
+import asyncio
 import sys
 from pathlib import Path
 
 import structlog
+
+from backend.config import settings
+from backend.llm import LLMAdapter
+from backend.pipeline.analyzer import analyze_python_file_sync
+from backend.pipeline.report_generator import format_report_text, save_report_json
 
 logger = structlog.get_logger()
 
@@ -82,13 +88,37 @@ def analyze_file(file_path: str) -> None:
         sys.exit(1)
 
     print(f"Analyzing: {file_path}")
-    print("Note: Full analysis pipeline not yet implemented.")
-    print("This is the initial architecture phase.")
-    print("\nComing soon:")
-    print("  - AST parsing and structural analysis")
-    print("  - Formal specification extraction")
-    print("  - Multi-critic verification loop")
-    print("  - Synthesis and repair suggestions")
+
+    # Determine LLM adapter
+    adapter = None
+    if settings.cerebras_api_key:
+        from backend.llm.cerebras_adapter import CerebrasAdapter
+        adapter = CerebrasAdapter()
+        print("Using Cerebras LLM for Tier 3 checks")
+    else:
+        print("No LLM API key found - running Tier 1 + 2 checks only")
+
+    # Run analysis
+    try:
+        report = analyze_python_file_sync(str(path), adapter)
+
+        # Print report
+        print("\n")
+        print(format_report_text(report))
+
+        # Save JSON report
+        json_path = path.with_suffix('.pmill.json')
+        save_report_json(report, str(json_path))
+        print(f"\nFull report saved to: {json_path}")
+
+    except Exception as e:
+        logger.error("analysis_failed", file_path=file_path, error=str(e))
+        print(f"\nError during analysis: {e}")
+        sys.exit(1)
+    finally:
+        # Clean up adapter if it was created
+        if adapter:
+            asyncio.run(adapter.close())
 
 
 def verify_path(path: str) -> None:

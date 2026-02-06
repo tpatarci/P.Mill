@@ -23,6 +23,12 @@ class Settings(BaseSettings):
     anthropic_model: str = "claude-sonnet-4-5-20250929"
     cerebras_model: str = "llama3.3-70b"
 
+    # LLM Retry Configuration
+    llm_max_retries: int = 3
+    llm_timeout_seconds: int = 30
+    llm_max_tokens: int = 50  # For Tier 3 checks
+    llm_temperature: float = 0.0
+
     # Analysis Configuration
     max_tokens_per_analysis: int = 100000
     analysis_timeout_seconds: int = 300
